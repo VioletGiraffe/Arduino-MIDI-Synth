@@ -21,16 +21,36 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 void setup()
 {
 	Serial.begin(115200);
-	MIDI.setHandleNoteOn(&CMidiHandler::onNoteOn);
-	MIDI.setHandleNoteOff(&CMidiHandler::onNoteOff);
+	//MIDI.setHandleNoteOn(&CMidiHandler::onNoteOn);
+	//MIDI.setHandleNoteOff(&CMidiHandler::onNoteOff);
+	MIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {
+		tft.setTextSize(3);
+		tft.fillScreen(ST7735_BLACK);
+		tft.println("Note on:");
+		tft.println(channel);
+		tft.println(note);
+		tft.println(velocity);
+	});
+
+	MIDI.setHandleNoteOff([](byte channel, byte note, byte velocity) {
+		tft.setTextSize(3);
+		tft.fillScreen(ST7735_BLACK);
+		tft.println("Note off:");
+		tft.println(channel);
+		tft.println(note);
+		tft.println(velocity);
+	});
+
 	MIDI.begin();
 
-	tft.initR(INITR_144GREENTAB); // initialize a ST7735S chip, 1.44" TFT, black tab
+	tft.initR(INITR_144GREENTAB); // initialize a ST7735S chip, 1.44" TFT, yellow tab on a chinese clone
 	tft.fillScreen(ST7735_BLACK);
-	tft.setTextWrap(false);
 
-	tft.setTextColor(RGB_to_565(255, 0, 10), ST7735_BLACK);
-	tft.println("Hello Due");
+	tft.setTextColor(RGB_to_565(0, 127, 255), ST7735_BLACK);
+
+	tft.setTextWrap(false);
+	tft.setTextSize(2);
+	tft.print("Waiting\n\nfor\n\nMIDI\n\nmessages");
 
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, LOW);
