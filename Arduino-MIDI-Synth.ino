@@ -20,7 +20,7 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 
 void setup()
 {
-	Serial.begin(115200);
+//	Serial.begin(115200);
 	//MIDI.setHandleNoteOn(&CMidiHandler::onNoteOn);
 	//MIDI.setHandleNoteOff(&CMidiHandler::onNoteOff);
 	MIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {
@@ -42,6 +42,7 @@ void setup()
 	});
 
 	MIDI.begin();
+	MIDI.turnThruOff();
 
 	tft.initR(INITR_144GREENTAB); // initialize a ST7735S chip, 1.44" TFT, yellow tab on a chinese clone
 	tft.fillScreen(ST7735_BLACK);
@@ -55,7 +56,7 @@ void setup()
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, LOW);
 
-	Serial.println("Setup finished.");
+//	Serial.println("Setup finished.");
 }
 
 void loop()
