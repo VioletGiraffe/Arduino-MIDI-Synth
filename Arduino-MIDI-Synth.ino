@@ -30,6 +30,9 @@ void setup()
 	tft.setTextColor(RGB_to_565(255, 0, 10), ST7735_BLACK);
 	tft.println("Hello Due");
 
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
+
 	Serial1.print("Setup finished.");
 }
 
