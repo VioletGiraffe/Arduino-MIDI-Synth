@@ -56,7 +56,29 @@ void setup()
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, LOW);
 
+ dac_setup();
+
 //	Serial.println("Setup finished.");
+}
+
+void dac_setup ()
+{
+  pmc_enable_periph_clk (DACC_INTERFACE_ID) ; // start clocking DAC
+  DACC->DACC_CR = DACC_CR_SWRST ;  // reset DAC
+
+  DACC->DACC_MR =
+    DACC_MR_TRGEN_EN | DACC_MR_TRGSEL (1) |  // trigger 1 = TIO output of TC0
+    (0 << DACC_MR_USER_SEL_Pos) |  // select channel 0
+    DACC_MR_REFRESH (0x0F) |       // bit of a guess... I'm assuming refresh not needed at 48kHz
+    (24 << DACC_MR_STARTUP_Pos) ;  // 24 = 1536 cycles which I think is in range 23..45us since DAC clock = 42MHz
+
+  DACC->DACC_IDR = 0xFFFFFFFF ; // no interrupts
+  DACC->DACC_CHER = DACC_CHER_CH0 << 0 ; // enable chan0
+}
+
+void dac_write (int val)
+{
+  DACC->DACC_CDR = val & 0xFFF ;
 }
 
 void loop()
