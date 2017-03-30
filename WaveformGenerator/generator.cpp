@@ -1,6 +1,6 @@
 #include "generator.h"
 
-#include <math.h>
+#include <cmath>
 
 std::vector<float> Generator::generateSine(const uint32_t numSamples, float amplitude, bool signedSamples)
 {
