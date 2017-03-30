@@ -15,10 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 
 // Graph setup
-	_chartView = new QChartView(&_chart);
-	auto chartLayout = new QHBoxLayout;
-	chartLayout->addWidget(_chartView);
-	ui->chartWidget->setLayout(chartLayout);
+	ui->chartWidget->setChart(&_chart);
 
 	_series = new QLineSeries;
 	_chart.addSeries(_series);

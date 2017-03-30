@@ -156,7 +156,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QWidget" name="chartWidget" native="true"/>
+     <widget class="QtCharts::QChartView" name="chartWidget" native="true"/>
     </item>
    </layout>
   </widget>
@@ -172,6 +172,14 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QtCharts::QChartView</class>
+   <extends>QWidget</extends>
+   <header location="global">QChartView</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

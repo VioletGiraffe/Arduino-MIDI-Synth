@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QChart>
-#include <QChartView>
 #include <QLineSeries>
 #include <QMainWindow>
 
@@ -37,7 +36,6 @@ private:
 	std::vector<float> _samples;
 
 	QtCharts::QChart _chart;
-	QtCharts::QChartView* _chartView = nullptr;
 	QtCharts::QLineSeries* _series = nullptr;
 };
 
