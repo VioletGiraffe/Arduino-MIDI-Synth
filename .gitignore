@@ -15,6 +15,11 @@
 __vm/
 *.sln
 
+#Qt Creator files
+*Makefile*
+*.qmake.stash
+ui_*.h
+
 
 # Build results
 [Dd]ebug/
