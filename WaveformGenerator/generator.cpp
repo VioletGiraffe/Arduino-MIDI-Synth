@@ -12,7 +12,7 @@ std::vector<float> Generator::generateSine(const uint32_t numSamples, float ampl
 	{
 		float sample = amplitude * sin(i * step);
 		if (!signedSamples)
-			sample += amplitude * 0.5f;
+			sample += amplitude;
 
 		samples.push_back(sample);
 	}
