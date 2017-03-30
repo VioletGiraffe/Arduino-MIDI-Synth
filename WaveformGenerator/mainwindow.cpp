@@ -64,7 +64,7 @@ void MainWindow::generateWaveformSourceCode()
 
 void MainWindow::generateWaveform()
 {
-	_samples = Generator::generateSine(numSamples(), amplitude(), signedSamples());
+	_samples = Generator::generateTriangle(numSamples(), amplitude(), signedSamples());
 	updateWaveformGraph();
 }
 
