@@ -19,3 +19,36 @@ std::vector<float> Generator::generateSine(const uint32_t numSamples, float ampl
 
 	return samples;
 }
+
+std::vector<float> Generator::generateSquare(const uint32_t numSamples, float amplitude, bool signedSamples)
+{
+	std::vector<float> samples(numSamples, signedSamples ? -amplitude : 0.0f);
+
+	const float dutyCycle = 0.5f;
+	for (uint32_t i = 0, n = static_cast<uint32_t>(numSamples * dutyCycle + 0.5f); i < n; ++i)
+		samples[i] = signedSamples ? amplitude : amplitude * 2.0f;
+
+	return samples;
+}
+
+std::vector<float> Generator::generateTriangle(const uint32_t numSamples, float amplitude, bool signedSamples)
+{
+	std::vector<float> samples;
+	samples.reserve(numSamples);
+
+	const float tip = 0.5f;
+	const float startY = signedSamples ? -amplitude : 0, tipY = signedSamples ? amplitude : amplitude * 2.0f;
+	const auto tipX = static_cast<uint32_t>(numSamples * tip + 0.5f);
+	const float kRising = (tipY - startY) / tipX, kFalling = (tipY - startY) / (numSamples - tipX);
+	const float b = signedSamples ? -amplitude : 0.0f;
+	for (uint32_t x = 0; x < numSamples; ++x)
+	{
+		// y = kx + b
+		if (x < tipX)
+			samples[x] = kRising * x + b;
+		else
+			samples[x] = kFalling * x + b;
+	}
+
+	return samples;
+}
