@@ -28,6 +28,9 @@ private:
 	float amplitude() const;
 	bool signedSamples() const;
 
+	void setupGraphXAxis();
+	void setupGraphYAxis();
+
 private:
 	Ui::MainWindow *ui;
 

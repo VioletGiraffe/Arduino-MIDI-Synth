@@ -24,21 +24,33 @@ MainWindow::MainWindow(QWidget *parent) :
 	_chart.addSeries(_series);
 
 	auto axisX = new QValueAxis;
-	axisX->setRange(0, numSamples());
 	_chart.setAxisX(axisX, _series);
 	auto axisY = new QValueAxis;
-	axisY->setRange(signedSamples() ? -amplitude() : 0, signedSamples() ? amplitude() : 2.0 * amplitude());
 	axisY->setTitleText("Amplitude");
 	_chart.setAxisY(axisY, _series);
 	_chart.legend()->hide();
 
 // Live UI
-	connect(ui->numSamples, (void (QSpinBox::*)(int))&QSpinBox::valueChanged, this, [this](int){generateWaveform();});
-	connect(ui->waveform, (void (QComboBox::*)(int))&QComboBox::currentIndexChanged, this, [this](int){generateWaveform();});
-	connect(ui->amplitude, (void (QDoubleSpinBox::*)(double))&QDoubleSpinBox::valueChanged, this, [this](double){generateWaveform();});
-	connect(ui->signedSamples, &QCheckBox::toggled, this, [this](bool){generateWaveform();});
+	connect(ui->numSamples, (void (QSpinBox::*)(int))&QSpinBox::valueChanged, this, [this](int){
+		setupGraphXAxis();
+		generateWaveform();
+	});
+	connect(ui->waveform, (void (QComboBox::*)(int))&QComboBox::currentIndexChanged, this, [this](int){
+		generateWaveform();
+	});
+	connect(ui->amplitude, (void (QDoubleSpinBox::*)(double))&QDoubleSpinBox::valueChanged, this, [this](double){
+		setupGraphYAxis();
+		generateWaveform();
+	});
+	connect(ui->signedSamples, &QCheckBox::toggled, this, [this](bool){
+		setupGraphYAxis();
+		generateWaveform();
+	});
 
 	connect(ui->generate, &QPushButton::clicked, this, &MainWindow::generateWaveformSourceCode);
+
+	setupGraphXAxis();
+	setupGraphYAxis();
 
 	generateWaveform();
 }
@@ -85,4 +97,14 @@ float MainWindow::amplitude() const
 bool MainWindow::signedSamples() const
 {
 	return ui->signedSamples->isChecked();
+}
+
+void MainWindow::setupGraphXAxis()
+{
+	_chart.axisX()->setRange(0, numSamples());
+}
+
+void MainWindow::setupGraphYAxis()
+{
+	_chart.axisY()->setRange(signedSamples() ? -amplitude() : 0, signedSamples() ? amplitude() : 2.0 * amplitude());
 }
