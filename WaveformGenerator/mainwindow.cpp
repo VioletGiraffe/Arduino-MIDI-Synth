@@ -1,7 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "generator.h"
+#include "sourcecodedialog/generatedsourcecodedialog.h"
 
+#include <QStringBuilder>
 #include <QValueAxis>
 
 #include <iterator>
@@ -59,7 +61,24 @@ MainWindow::~MainWindow()
 
 void MainWindow::generateWaveformSourceCode()
 {
+	QString sourceCode = ui->type->text() + " waveform[] = {\n";
+	for (const float sample: _samples)
+	{
+		QString sampleText = QString::number((double)sample, 'g', 20);
+		if (!sampleText.contains('.') && !sampleText.contains('e'))
+			sampleText += ".0";
 
+		sourceCode += '\t' % sampleText % "f,\n";
+	}
+
+	if (!_samples.empty())
+		sourceCode.chop(2); // Remove extra ",\n" after the last item
+
+	sourceCode += "\n};";
+
+	GeneratedSourceCodeDialog sourceCodeView;
+	sourceCodeView.setCode(sourceCode);
+	sourceCodeView.exec();
 }
 
 void MainWindow::generateWaveform()

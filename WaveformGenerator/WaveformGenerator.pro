@@ -17,9 +17,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
 		mainwindow.cpp \
-	generator.cpp
+	generator.cpp \
+    sourcecodedialog/generatedsourcecodedialog.cpp
 
 HEADERS  += mainwindow.h \
-	generator.h
+	generator.h \
+    sourcecodedialog/generatedsourcecodedialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    sourcecodedialog/generatedsourcecodedialog.ui
