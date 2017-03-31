@@ -1,7 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "generator.h"
 #include "sourcecodedialog/generatedsourcecodedialog.h"
+#include "generators/sinegenerator.h"
+#include "generators/squaregenerator.h"
+#include "generators/trianglegenerator.h"
 
 #include <QStringBuilder>
 #include <QValueAxis>
@@ -48,6 +50,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	connect(ui->generate, &QPushButton::clicked, this, &MainWindow::generateWaveformSourceCode);
 
+// Generators
+	_generators.emplace_back(std::make_unique<SineGenerator>());
+	_generators.emplace_back(std::make_unique<SquareGenerator>());
+	_generators.emplace_back(std::make_unique<TriangleGenerator>());
+
+// Final UI initialization
+	for (const auto& gen: _generators)
+		ui->waveform->addItem(gen->name());
+
 	setupGraphXAxis();
 	setupGraphYAxis();
 
@@ -83,7 +94,7 @@ void MainWindow::generateWaveformSourceCode()
 
 void MainWindow::generateWaveform()
 {
-	_samples = Generator::generateTriangle(numSamples(), amplitude(), signedSamples());
+	_samples = _generators[ui->waveform->currentIndex()]->generate(numSamples(), amplitude(), signedSamples());
 	updateWaveformGraph();
 }
 

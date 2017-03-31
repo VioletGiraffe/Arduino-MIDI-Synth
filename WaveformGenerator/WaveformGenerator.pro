@@ -17,12 +17,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
 		mainwindow.cpp \
-	generator.cpp \
-    sourcecodedialog/generatedsourcecodedialog.cpp
+    sourcecodedialog/generatedsourcecodedialog.cpp \
+    waveformgenerator.cpp \
+    generators/sinegenerator.cpp \
+    generators/squaregenerator.cpp \
+    generators/trianglegenerator.cpp
 
 HEADERS  += mainwindow.h \
-	generator.h \
-    sourcecodedialog/generatedsourcecodedialog.h
+    sourcecodedialog/generatedsourcecodedialog.h \
+    waveformgenerator.h \
+    generators/sinegenerator.h \
+    generators/squaregenerator.h \
+    generators/trianglegenerator.h
 
 FORMS    += mainwindow.ui \
     sourcecodedialog/generatedsourcecodedialog.ui

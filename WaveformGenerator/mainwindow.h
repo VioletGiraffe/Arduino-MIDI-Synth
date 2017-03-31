@@ -5,11 +5,14 @@
 #include <QMainWindow>
 
 #include <cstdint>
+#include <memory>
 #include <vector>
 
 namespace Ui {
 class MainWindow;
 }
+
+class WaveformGenerator;
 
 class MainWindow : public QMainWindow
 {
@@ -37,5 +40,7 @@ private:
 
 	QtCharts::QChart _chart;
 	QtCharts::QLineSeries* _series = nullptr;
+
+	std::vector<std::unique_ptr<WaveformGenerator>> _generators;
 };
 
