@@ -33,6 +33,8 @@ private:
 	void setupGraphXAxis();
 	void setupGraphYAxis();
 
+	WaveformGenerator* currentWaveformGenerator() const;
+
 private:
 	Ui::MainWindow *ui;
 

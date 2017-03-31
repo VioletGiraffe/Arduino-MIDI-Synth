@@ -5,7 +5,7 @@ std::vector<float> TriangleGenerator::generate(const uint32_t numSamples, float 
 	std::vector<float> samples;
 	samples.reserve(numSamples);
 
-	const float tip = 0.2f;
+	const float tip = _extraParameter;
 	const float startY = signedSamples ? -amplitude : 0, tipY = signedSamples ? amplitude : amplitude * 2.0f;
 	const auto tipX = static_cast<uint32_t>(numSamples * tip + 0.5f);
 	const float kRising = (tipY - startY) / tipX, kFalling = (startY - tipY) / (numSamples - tipX);
@@ -26,4 +26,14 @@ std::vector<float> TriangleGenerator::generate(const uint32_t numSamples, float 
 const char* TriangleGenerator::name() const
 {
 	return "Triangle";
+}
+
+bool TriangleGenerator::hasExtraParameter() const
+{
+	return true;
+}
+
+const char* TriangleGenerator::extraParameterName() const
+{
+	return "Tip";
 }

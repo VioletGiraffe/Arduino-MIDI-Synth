@@ -36,7 +36,10 @@ MainWindow::MainWindow(QWidget *parent) :
 		setupGraphXAxis();
 		generateWaveform();
 	});
-	connect(ui->waveform, (void (QComboBox::*)(int))&QComboBox::currentIndexChanged, this, [this](int){
+	connect(ui->waveform, (void (QComboBox::*)(int))&QComboBox::currentIndexChanged, this, [this](int waveformIndex){
+		ui->extraParameter->setValue(_generators[waveformIndex]->extraParameter());
+		ui->extraParameterName->setText(_generators[waveformIndex]->extraParameterName());
+
 		generateWaveform();
 	});
 	connect(ui->amplitude, (void (QDoubleSpinBox::*)(double))&QDoubleSpinBox::valueChanged, this, [this](double){
@@ -45,6 +48,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	});
 	connect(ui->signedSamples, &QCheckBox::toggled, this, [this](bool){
 		setupGraphYAxis();
+		generateWaveform();
+	});
+	connect(ui->extraParameter, (void (QDoubleSpinBox::*)(double))&QDoubleSpinBox::valueChanged, this, [this](double value){
+		currentWaveformGenerator()->setExtraParameter((float)value);
 		generateWaveform();
 	});
 
@@ -94,7 +101,7 @@ void MainWindow::generateWaveformSourceCode()
 
 void MainWindow::generateWaveform()
 {
-	_samples = _generators[ui->waveform->currentIndex()]->generate(numSamples(), amplitude(), signedSamples());
+	_samples = currentWaveformGenerator()->generate(numSamples(), amplitude(), signedSamples());
 	updateWaveformGraph();
 }
 
@@ -134,4 +141,9 @@ void MainWindow::setupGraphXAxis()
 void MainWindow::setupGraphYAxis()
 {
 	_chart.axisY()->setRange(signedSamples() ? -amplitude() : 0, signedSamples() ? amplitude() : 2.0 * amplitude());
+}
+
+WaveformGenerator*MainWindow::currentWaveformGenerator() const
+{
+	return _generators[ui->waveform->currentIndex()].get();
 }

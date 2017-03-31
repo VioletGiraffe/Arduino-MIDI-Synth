@@ -13,8 +13,10 @@ public:
 
 	virtual bool hasExtraParameter() const;
 	virtual const char* extraParameterName() const;
+
+	float extraParameter() const;
 	void setExtraParameter(float p);
 
 protected:
-	float _extraParameter = 0.0f;
+	float _extraParameter = 0.1f;
 };
