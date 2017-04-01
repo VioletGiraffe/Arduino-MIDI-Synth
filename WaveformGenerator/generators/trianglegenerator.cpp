@@ -1,11 +1,16 @@
 #include "trianglegenerator.h"
 
+TriangleGenerator::TriangleGenerator()
+{
+	_extraParameter = 50.0f;
+}
+
 std::vector<float> TriangleGenerator::generate(const uint32_t numSamples, float amplitude, bool signedSamples)
 {
 	std::vector<float> samples;
 	samples.reserve(numSamples);
 
-	const float tip = _extraParameter;
+	const float tip = _extraParameter * 0.01f; // Percent to fraction
 	const float startY = signedSamples ? -amplitude : 0, tipY = signedSamples ? amplitude : amplitude * 2.0f;
 	const auto tipX = static_cast<uint32_t>(numSamples * tip + 0.5f);
 	const float kRising = (tipY - startY) / tipX, kFalling = (startY - tipY) / (numSamples - tipX);
@@ -33,7 +38,7 @@ bool TriangleGenerator::hasExtraParameter() const
 	return true;
 }
 
-const char* TriangleGenerator::extraParameterName() const
+const WaveformGenerator::ExtraParameterProperties TriangleGenerator::extraParameterProperties()
 {
-	return "Tip";
+	return ExtraParameterProperties{"Tip", 0.0f, 100.0f, 1.0f};
 }

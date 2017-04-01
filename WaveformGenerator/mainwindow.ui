@@ -147,7 +147,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QDoubleSpinBox" name="extraParameter"/>
+           <widget class="QDoubleSpinBox" name="extraParameter">
+            <property name="accelerated">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="Line" name="line_4">

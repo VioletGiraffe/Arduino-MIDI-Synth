@@ -4,11 +4,6 @@ WaveformGenerator::~WaveformGenerator()
 {
 }
 
-const char* WaveformGenerator::extraParameterName() const
-{
-	return nullptr;
-}
-
 float WaveformGenerator::extraParameter() const
 {
 	return _extraParameter;
@@ -17,6 +12,11 @@ float WaveformGenerator::extraParameter() const
 bool WaveformGenerator::hasExtraParameter() const
 {
 	return false;
+}
+
+const WaveformGenerator::ExtraParameterProperties WaveformGenerator::extraParameterProperties()
+{
+	return ExtraParameterProperties{std::string(), 0.0f, 0.0f, 0.0f};
 }
 
 void WaveformGenerator::setExtraParameter(float p)

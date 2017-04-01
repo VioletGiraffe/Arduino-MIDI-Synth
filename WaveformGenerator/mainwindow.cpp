@@ -37,8 +37,20 @@ MainWindow::MainWindow(QWidget *parent) :
 		generateWaveform();
 	});
 	connect(ui->waveform, (void (QComboBox::*)(int))&QComboBox::currentIndexChanged, this, [this](int waveformIndex){
-		ui->extraParameter->setValue(_generators[waveformIndex]->extraParameter());
-		ui->extraParameterName->setText(_generators[waveformIndex]->extraParameterName());
+		const auto& gen = _generators[waveformIndex];
+
+		for (int i = 0; i < ui->extraParameterLayout->count(); ++i)
+			ui->extraParameterLayout->itemAt(i)->widget()->setVisible(gen->hasExtraParameter());
+
+		if (gen->hasExtraParameter())
+		{
+			ui->extraParameter->setValue(gen->extraParameter());
+			ui->extraParameter->setMinimum(gen->extraParameterProperties().minValue);
+			ui->extraParameter->setMaximum(gen->extraParameterProperties().maxValue);
+			ui->extraParameter->setSingleStep(gen->extraParameterProperties().step);
+
+			ui->extraParameterName->setText(gen->extraParameterProperties().name.c_str());
+		}
 
 		generateWaveform();
 	});
