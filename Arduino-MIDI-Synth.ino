@@ -44,7 +44,7 @@ void setup()
 	MIDI.begin();
 	MIDI.turnThruOff();
 
-	tft.initR(INITR_144GREENTAB); // initialize a ST7735S chip, 1.44" TFT, yellow tab on a chinese clone
+	tft.initR(INITR_144GREENTAB); // initialize a ST7735S chip, 1.44" TFT (yellow tab on a chinese clone)
 	tft.fillScreen(ST7735_BLACK);
 
 	tft.setTextColor(RGB_to_565(0, 127, 255), ST7735_BLACK);
@@ -67,16 +67,16 @@ void dac_setup ()
   DACC->DACC_CR = DACC_CR_SWRST ;  // reset DAC
 
   DACC->DACC_MR =
-    DACC_MR_TRGEN_EN | DACC_MR_TRGSEL (1) |  // trigger 1 = TIO output of TC0
+    0 /* No trigger, else DACC_MR_TRGEN_EN */ | DACC_MR_TRGSEL (0) |
     (0 << DACC_MR_USER_SEL_Pos) |  // select channel 0
-    DACC_MR_REFRESH (0x0F) |       // bit of a guess... I'm assuming refresh not needed at 48kHz
+    DACC_MR_REFRESH (0x2) |        // Refresh = DAC_CLOCK / (1024 * Fs) (https://cjpnmiscellany.wordpress.com/2015/08/20/settings-for-the-arduino-dac/)
     (24 << DACC_MR_STARTUP_Pos) ;  // 24 = 1536 cycles which I think is in range 23..45us since DAC clock = 42MHz
 
   DACC->DACC_IDR = 0xFFFFFFFF ; // no interrupts
   DACC->DACC_CHER = DACC_CHER_CH0 << 0 ; // enable chan0
 }
 
-void dac_write (int val)
+inline void dac_write (int val)
 {
   DACC->DACC_CDR = val & 0xFFF ;
 }
