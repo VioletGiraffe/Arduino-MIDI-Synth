@@ -124,7 +124,7 @@
           <item>
            <widget class="QLineEdit" name="type">
             <property name="text">
-             <string>float</string>
+             <string>uint16_t</string>
             </property>
            </widget>
           </item>

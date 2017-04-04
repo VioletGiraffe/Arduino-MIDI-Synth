@@ -91,14 +91,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::generateWaveformSourceCode()
 {
-	QString sourceCode = ui->type->text() + " waveform[] = {\n";
+	const QString type = ui->type->text();
+	QString sourceCode = type + " waveform[] = {\n";
 	for (const float sample: _samples)
 	{
-		QString sampleText = QString::number((double)sample, 'g', 20);
-		if (!sampleText.contains('.') && !sampleText.contains('e'))
-			sampleText += ".0";
-
-		sourceCode += '\t' % sampleText % "f,\n";
+		QString sampleText = sampleValueToSourceCode(type, sample);
+		sourceCode = sourceCode % '\t' % sampleText % ",\n";
 	}
 
 	if (!_samples.empty())
@@ -157,5 +155,18 @@ void MainWindow::setupGraphYAxis()
 
 WaveformGenerator*MainWindow::currentWaveformGenerator() const
 {
-	return _generators[ui->waveform->currentIndex()].get();
+	return _generators[(size_t)ui->waveform->currentIndex()].get();
+}
+
+QString MainWindow::sampleValueToSourceCode(const QString &type, float sample)
+{
+	const bool intType = type.toLower().contains("int");
+	QString sampleText = intType ? QString::number((int64_t)(sample + 0.5f)) : QString::number((double)sample, 'g', 20);
+	if (!intType && !sampleText.contains('.') && !sampleText.contains('e'))
+		sampleText += ".0";
+
+	if (!intType)
+		sampleText += 'f';
+
+	return sampleText;
 }

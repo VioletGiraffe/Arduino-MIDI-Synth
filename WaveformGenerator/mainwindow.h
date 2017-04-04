@@ -35,6 +35,8 @@ private:
 
 	WaveformGenerator* currentWaveformGenerator() const;
 
+	static QString sampleValueToSourceCode(const QString& type, float sample);
+
 private:
 	Ui::MainWindow *ui;
 
