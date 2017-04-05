@@ -6,8 +6,8 @@
 class CWaveformSin
 {
 public:
-	size_t size() const;
-	inline uint16_t sample(size_t index) const
+	size_t numSamples() const;
+	inline uint16_t operator[](size_t index) const
 	{
 		return wavetable[index];
 	}

@@ -7,6 +7,8 @@
 
 #include "MidiHandler.h"
 #include "FixedPoint.h"
+#include "WaveformSin.h"
+#include "Generator.h"
 
 MIDI_CREATE_DEFAULT_INSTANCE();
 CMidiHandler& midiHandler = CMidiHandler::instance();

@@ -603,7 +603,7 @@ const uint16_t CWaveformSin::wavetable[] = {
 	2027
 };
 
-size_t CWaveformSin::size() const
+size_t CWaveformSin::numSamples() const
 {
 	return sizeof(wavetable) / sizeof(wavetable[0]);
 }
