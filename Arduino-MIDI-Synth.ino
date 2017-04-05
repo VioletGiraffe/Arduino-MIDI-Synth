@@ -1,3 +1,4 @@
+#include <DueTimer.h>
 #include <Adafruit_ST7735.h>
 #include <gfxfont.h>
 #include <Adafruit_GFX.h>
@@ -19,6 +20,14 @@ CMidiHandler& midiHandler = CMidiHandler::instance();
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 
 #define RGB_to_565(R, G, B) static_cast<uint16_t>(((R & 0xF8) << 8) | ((G & 0xFC) << 3) | (B >> 3))
+
+CGenerator soundGen;
+constexpr uint32_t samplingRate = 24000;
+
+void playSound()
+{
+	dac_write(soundGen.nextSample<CWaveformSin, samplingRate>(1000u));
+}
 
 void setup()
 {
@@ -58,7 +67,9 @@ void setup()
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, LOW);
 
- dac_setup();
+	dac_setup();
+
+	Timer2.attachInterrupt(&playSound).setFrequency(samplingRate).start(); // 24 kHz sampling rate
 
 //	Serial.println("Setup finished.");
 }
