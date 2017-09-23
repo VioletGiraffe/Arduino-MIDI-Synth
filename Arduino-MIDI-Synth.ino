@@ -10,7 +10,7 @@
 #include "FixedPoint.h"
 #include "WaveformSin.h"
 #include "Generator.h"
-#include "QuadratureRotaryEncoder\QuadratureRotaryEncoder.h"
+#include "QuadratureRotaryEncoder.h"
 
 MIDI_CREATE_DEFAULT_INSTANCE();
 CMidiHandler& midiHandler = CMidiHandler::instance();
@@ -76,7 +76,6 @@ void setup()
 	digitalWrite(LED_BUILTIN, LOW);
 
 	encoder.setOnRotationListener([](QuadratureRotaryEncoder::RotationDirection direction) {});
-
 	Timer2.attachInterrupt([](){encoder.update();}).setFrequency(2000).start();
 
 	dac_setup();
