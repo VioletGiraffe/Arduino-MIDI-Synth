@@ -75,7 +75,7 @@ void setup()
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, LOW);
 
-	encoder.setOnRotationListener([](QuadratureRotaryEncoder::RotationDirection direction) {});
+  encoder.setControlledValue(position);
 	Timer2.attachInterrupt([](){encoder.update();}).setFrequency(2000).start();
 
 	dac_setup();

@@ -9,7 +9,8 @@ namespace std {
   }
 }
 
-QuadratureRotaryEncoder::QuadratureRotaryEncoder(int pinA, int pinB)
+QuadratureRotaryEncoder::QuadratureRotaryEncoder(int pinA, int pinB, const default_constructible_ref<int>& value) : 
+  _value(value)
 {
 	pinMode(pinA, INPUT_PULLUP);
 	pinMode(pinB, INPUT_PULLUP);
@@ -28,6 +29,15 @@ void QuadratureRotaryEncoder::update()
 
 	if (_debouncerA.fell())
 	{
-		_listener(_debouncerB.read() != false ? CW : CCW);
+    const bool cw = _debouncerB.read() != false;
+    if (_value)
+    {
+      if (cw)
+        ++_value.get();
+      else
+        --_value.get();
+    }
+      
+		_listener(cw ? CW : CCW);
 	}
 }
