@@ -1,7 +1,10 @@
 #include <DueTimer.h>
 #include <Adafruit_ST7735.h>
+#include <Adafruit_SSD1306.h>
 #include <gfxfont.h>
 #include <Adafruit_GFX.h>
+#include <SPI.h>
+#include <Wire.h>
 
 #include <string.h>
 #include <MIDI.h>
@@ -12,13 +15,15 @@
 #include "Generator.h"
 #include "QuadratureRotaryEncoder.h"
 
-MIDI_CREATE_DEFAULT_INSTANCE();
+MIDI_CREATE_DEFAULT_INSTANCE()
 CMidiHandler& midiHandler = CMidiHandler::instance();
 
-#define TFT_CS 10
-#define TFT_DC 8
-#define TFT_RST 0  // you can also connect this to the Arduino reset, in which case, set this #define pin to 0!
-Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
+//#define TFT_CS 10
+//#define TFT_DC 8
+//#define TFT_RST 0  // you can also connect this to the Arduino reset, in which case, set this #define pin to 0!
+//Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
+
+Adafruit_SSD1306 display;
 
 #define RGB_to_565(R, G, B) static_cast<uint16_t>(((R & 0xF8) << 8) | ((G & 0xFC) << 3) | (B >> 3))
 
@@ -43,40 +48,42 @@ void setup()
 	//MIDI.setHandleNoteOff(&CMidiHandler::onNoteOff);
 
 	MIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {
-		tft.setTextSize(3);
-		tft.fillScreen(ST7735_BLACK);
-		tft.println("Note on:");
-		tft.println(channel);
-		tft.println(note);
-		tft.println(velocity);
+		display.setTextSize(3);
+		display.fillScreen(RGB_to_565(0, 0, 0));
+		display.println("Note on:");
+		display.println(channel);
+		display.println(note);
+		display.println(velocity);
 	});
 
 	MIDI.setHandleNoteOff([](byte channel, byte note, byte velocity) {
-		tft.setTextSize(3);
-		tft.fillScreen(ST7735_BLACK);
-		tft.println("Note off:");
-		tft.println(channel);
-		tft.println(note);
-		tft.println(velocity);
+		display.setTextSize(3);
+		display.fillScreen(RGB_to_565(0, 0, 0));
+		display.println("Note off:");
+		display.println(channel);
+		display.println(note);
+		display.println(velocity);
 	});
 
 	MIDI.begin();
 	MIDI.turnThruOff();
 
-	tft.initR(INITR_144GREENTAB); // initialize a ST7735S chip, 1.44" TFT (yellow tab on a chinese clone)
-	tft.fillScreen(ST7735_BLACK);
+	//display.initR(INITR_144GREENTAB); // initialize a ST7735S chip, 1.44" TFT (yellow tab on a chinese clone)
+	display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false); // initialize with the I2C addr 0x3C (for the 128x64); by default, we'll generate the high voltage from the 3.3v line internally
 
-	tft.setTextColor(RGB_to_565(0, 127, 255), ST7735_BLACK);
+	display.clearDisplay();
+	//display.setTextColor(RGB_to_565(0, 127, 255), ST7735_BLACK);
+	display.setTextColor(WHITE);
 
-	tft.setTextWrap(false);
-	tft.setTextSize(2);
-	tft.print("Waiting\n\nfor\n\nMIDI\n\nmessages");
+	display.setTextWrap(false);
+	display.print("Waiting\nfor\nMIDI\nmessages");
+	display.display();
 
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, LOW);
 
-  encoder.setControlledValue(position);
-	Timer2.attachInterrupt([](){encoder.update();}).setFrequency(2000).start();
+	encoder.setControlledValue(position);
+	Timer2.attachInterrupt([]() {encoder.update(); }).setFrequency(2000).start();
 
 	dac_setup();
 
